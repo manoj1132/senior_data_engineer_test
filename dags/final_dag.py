@@ -4,7 +4,8 @@ from airflow.operator.python_operator import PythonOperator
 from airflow.operator.mysql_operator import MySqlOperator
 from airflow.operator.bash_operator import BashOperator
 
-from pull_
+from pull_messages import message_pull
+from pull_users_subscriptions import users_subscriptions_pull
 
 
 yesterday_date = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
@@ -18,8 +19,8 @@ default_args = {
 
 with DAG('spark_dag', default_args=default_args, schedule_interval='@daily', template_searchpath=['<local_path>/sql_files'], catchup=True) as dag:
   
-  t1=PythonOperator(task_id='users_subscription_data_pull', python_callable=users_subscription_data_pull)
-  t2=PythonOperator(task_id='messages_data_pull', python_callable=messages_data_pull)
+  t1=PythonOperator(task_id='users_subscription_data_pull', python_callable=users_subscriptions_pull)
+  t2=PythonOperator(task_id='messages_data_pull', python_callable=message_pull)
   
   t3=MySqlOperator(task_id='create_mysql_users_sql', mysql_conn_id="mysql_conn", sql="create_mysql_users_sql.sql")
   t4=MySqlOperator(task_id='create_mysql_subscriptions_sql', mysql_conn_id="mysql_conn", sql="create_mysql_subscriptions_sql.sql")
