@@ -2,7 +2,7 @@ BEGIN TRANSACTION;
 
 CREATE TEMP TABLE users_temp LIKE users;
 
-LOAD DATA INFILE '/absolute_path>/users.csv' INTO TABLE users_temp FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROW;
+LOAD (LOCAL) DATA INFILE '/absolute_path>/users.csv' INTO TABLE users_temp FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROW;
 
 DELETE FROM users_temp
 USING users
